@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class RegisterController extends Controller
 {
     /**
-     * LOGIN
+     * REGISTER
      */
     public function index(Request $request)
     {
         // VALIDASI
         $validator = Validator::make($request->all(), [
-            'email'    => 'required|email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
 
@@ -25,11 +27,19 @@ class LoginController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        // MEMBUAT USER
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password'  => bcrypt($request->password),
+            'email_verified_at' => now(),
+        ]);
+
         // GET EMAIL DAN PASSWORD
         $credentials = $request->only('email', 'password');
 
         // CEK JIKA EMAIL ATAU PASSWORD SALAH
-        if (!$token = auth()->guard('api')->attempt($credentials)) {
+        if(!$token = auth()->guard('api')->attempt($credentials)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Email atau Kata Sandi salah'
@@ -41,20 +51,6 @@ class LoginController extends Controller
             'success'       => true,
             'user'          => auth()->guard('api')->user()->only(['name', 'email']),
             'token'         => $token
-        ], 200);
-    }
-
-    /**
-     * LOGOUT
-     */
-    public function logout()
-    {
-        // HAPUS TOKEN JWT
-        JWTAuth::invalidate(JWTAuth::getToken());
-
-        // KEMBALIKAN SUKSES JIKA LOGOUT
-        return response()->json([
-            'success' => true,
-        ], 200);
+        ], 201);
     }
 }
