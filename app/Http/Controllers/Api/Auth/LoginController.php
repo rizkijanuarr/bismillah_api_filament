@@ -43,18 +43,4 @@ class LoginController extends Controller
             'token'         => $token
         ], 200); // 200 OK
     }
-
-    /**
-     * LOGOUT
-     */
-    public function logout()
-    {
-        // HAPUS TOKEN JWT
-        JWTAuth::invalidate(JWTAuth::getToken());
-
-        // KEMBALIKAN SUKSES JIKA LOGOUT
-        return response()->json([
-            'success' => true,
-        ], 200);
-    }
 }

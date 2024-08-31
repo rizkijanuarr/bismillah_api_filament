@@ -14,5 +14,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('/users', App\Http\Controllers\Api\UserController::class)
         ->only(['index', 'store', 'show', 'update', 'destroy']);
     // LOGOUT
-    Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
+    Route::post('/logout', [App\Http\Controllers\Api\Auth\LogoutController::class, 'index']);
 });
