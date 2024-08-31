@@ -9,9 +9,11 @@ Route::post('/login', [App\Http\Controllers\Api\Auth\LoginController::class, 'in
 Route::post('/register', [App\Http\Controllers\Api\Auth\RegisterController::class, 'index']);
 
 //group route with middleware "auth"
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api'], function () {
+    // USERS
+    Route::apiResource('/users', App\Http\Controllers\Api\UserController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
-    //logout
+    // LOGOUT
     Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
-
 });

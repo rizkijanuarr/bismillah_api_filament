@@ -33,7 +33,7 @@ class LoginController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Email atau Kata Sandi salah'
-            ], 400);
+            ], 401); // 401 Unauthorized
         }
 
         // KEMBALIKAN JIKA SEMUA BENAR SUKSES DAN GENERATE TOKEN JWT
@@ -41,7 +41,7 @@ class LoginController extends Controller
             'success'       => true,
             'user'          => auth()->guard('api')->user()->only(['name', 'email']),
             'token'         => $token
-        ], 200);
+        ], 200); // 200 OK
     }
 
     /**
