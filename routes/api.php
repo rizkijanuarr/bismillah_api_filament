@@ -12,8 +12,7 @@ Route::post('/register', [App\Http\Controllers\Api\Auth\RegisterController::clas
 Route::group(['middleware' => 'auth:api'], function () {
     // USERS
     Route::apiResource('/users', App\Http\Controllers\Api\UserController::class)
-        ->only(['index', 'store', 'update', 'destroy']);
-
+        ->only(['index', 'store', 'show', 'update', 'destroy']);
     // LOGOUT
     Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
 });
